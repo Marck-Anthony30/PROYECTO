@@ -1,4 +1,5 @@
 D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\App.java
+D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\components\DialogoImpresion.java
 D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\components\Dialogos.java
 D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\config\AppContext.java
 D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\config\DatabaseConfig.java
@@ -26,6 +27,9 @@ D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\model\UnidadMedida.java
 D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\model\Usuario.java
 D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\model\Venta.java
 D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\model\VentaDetalle.java
+D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\print\ImpresoraTermica.java
+D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\print\TicketEscPos.java
+D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\print\TicketVenta.java
 D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\repository\AbstractJpaRepository.java
 D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\repository\CategoriaRepository.java
 D:\xd\CineMax\src\main\java\pe\edu\upeu\cinemax\repository\ClienteRepository.java

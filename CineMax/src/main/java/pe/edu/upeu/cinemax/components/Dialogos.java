@@ -45,7 +45,11 @@ public final class Dialogos {
         alert.showAndWait();
     }
 
-    private static void aplicarEstilo(DialogPane pane) {
+    /**
+     * Aplica el CSS de la aplicación a cualquier diálogo de JavaFX.
+     * Es público para que otros diálogos (por ejemplo el de impresión) lo reutilicen.
+     */
+    public static void aplicarEstilo(DialogPane pane) {
         try {
             var css = Dialogos.class.getResource("/css/app.css");
             if (css != null) pane.getStylesheets().add(css.toExternalForm());

@@ -70,8 +70,10 @@ formulario a la izquierda y la tabla a la derecha.
 | **Funciones** | Programar una película en una sala, con fecha y hora. |
 | **Productos** | Catálogo de dulcería y entradas, con costo, % utilidad, precio y stock. |
 | **Clientes** | Alta y mantenimiento de clientes por DNI. |
-| **Ventas** | Registrar una venta con varias líneas, entradas asociadas a una función, IGV y total. |
-| **Historial** | Consultar ventas, ver su detalle y eliminarlas devolviendo el stock. |
+| **Ventas** | Registrar una venta con varias líneas, entradas asociadas a una función, IGV y total. Incluye **impresión de boleta en POS térmica de 58 mm por USB o Bluetooth**, con **código QR tipo SUNAT**. |
+| **Historial** | Consultar ventas, ver su detalle, **reimprimir su boleta** y eliminarlas devolviendo el stock. |
+
+> La impresión de boletas se explica en `docs/IMPRESION_TERMICA_58MM.md`.
 
 ---
 
@@ -161,6 +163,7 @@ CineMax/
 │   └── CineMax_PowerArchitect.architect
 ├── docs/
 │   ├── GUIA_EXPOSICION.md
+│   ├── IMPRESION_TERMICA_58MM.md
 │   └── capturas/            (8 capturas de la aplicación)
 └── src/main/
     ├── java/pe/edu/upeu/cinemax/
@@ -172,6 +175,7 @@ CineMax/
     │   ├── enums/                   estados de película, función y producto
     │   ├── exception/               BusinessException
     │   ├── model/                   entidades del dominio
+    │   ├── print/                   boleta ESC/POS y envío a POS 58 mm
     │   ├── repository/              acceso a datos con JDBC
     │   ├── service/                 interfaces e implementaciones
     │   └── util/                    Formato, Sesion, Validador

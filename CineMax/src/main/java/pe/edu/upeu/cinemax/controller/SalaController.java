@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -51,6 +52,19 @@ public class SalaController {
         filtrados = new FilteredList<>(datos, s -> true);
         tblSalas.setItems(filtrados);
         tblSalas.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+
+
+        tblSalas.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(Sala sala, boolean vacio) {
+                super.updateItem(sala, vacio);
+                if (!vacio && sala != null && sala.getCapacidad() >= 90) {
+                    setStyle("-fx-background-color: #f5c518;"); // amarillo
+                } else {
+                    setStyle(""); // color normal de la tabla
+                }
+            }
+        });
 
         cbxFiltroTipo.getItems().setAll("Todos", "2D", "3D", "VIP");
         cbxFiltroTipo.getSelectionModel().selectFirst();

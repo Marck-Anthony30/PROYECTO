@@ -98,6 +98,7 @@
         <Label fx:id="lblMensaje" wrapText="true" maxWidth="330.0"/>
 
         <Button text="Limpiar" onAction="#onLimpiar" styleClass="boton-secundario"/>
+        <Button text="Imprimir boleta" onAction="#onImprimirBoleta" styleClass="boton-secundario"/>
         <Button text="Registrar venta" onAction="#onRegistrar" styleClass="boton-primario"/>
     </HBox>
 </VBox>

@@ -19,6 +19,7 @@
         <Label text="Buscar:" styleClass="campo-etiqueta"/>
         <TextField fx:id="txtBuscarVenta" promptText="Cliente o código" prefWidth="200.0"/>
         <Button text="Refrescar" onAction="#onRefrescar" styleClass="boton-secundario"/>
+        <Button text="Imprimir boleta" onAction="#onImprimirBoleta" styleClass="boton-secundario"/>
         <Button text="Eliminar venta" onAction="#onEliminarVenta" styleClass="boton-peligro"/>
     </HBox>
 

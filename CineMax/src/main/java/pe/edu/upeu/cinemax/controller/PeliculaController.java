@@ -66,9 +66,9 @@ public class PeliculaController {
             protected void updateItem(Pelicula pelicula, boolean vacio) {
                 super.updateItem(pelicula, vacio);
                 if (!vacio && pelicula != null && pelicula.getEstado() == EstadoPelicula.RETIRADA) {
-                    setStyle("-fx-background-color: #17f5ba;"); // amarillo
+                    setStyle("-fx-background-color: #f5c518;"); // amarillo
                 } else {
-                    setStyle("");
+                    setStyle(""); // color normal de la tabla
                 }
             }
         });

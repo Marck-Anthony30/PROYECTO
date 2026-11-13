@@ -104,6 +104,18 @@ Esto demuestra la restricción `UNIQUE (id_sala, fecha, hora)`.
 > Punto clave: la venta se guarda en **una sola transacción**. Si el stock es
 > insuficiente, no se guarda ni la cabecera ni el detalle.
 
+### 7.1 Imprimir la boleta (opcional, 1 minuto)
+
+1. Al registrar la venta, aceptar el aviso **Imprimir boleta**, o pulsar el
+   botón **Imprimir boleta** en la parte inferior.
+2. Elegir **USB (impresora de Windows)** o **Bluetooth (puerto COM)**, revisar
+   la vista previa de 32 columnas y pulsar **Imprimir**.
+3. Mostrar el ticket con su **código QR tipo SUNAT**.
+4. Si no hay impresora, usar **Guardar prueba** y abrir
+   `Documentos\CineMax\boleta_prueba.txt`.
+
+El detalle completo está en `docs/IMPRESION_TERMICA_58MM.md`.
+
 ---
 
 ## 8. Historial (2 minutos)
@@ -113,7 +125,9 @@ Esto demuestra la restricción `UNIQUE (id_sala, fecha, hora)`.
 3. Seleccionar una venta y mostrar su detalle (producto, función, cantidad,
    importe).
 4. Señalar el resumen: **Total vendido S/ 86.50**, igual que el Excel del caso.
-5. Eliminar una venta y volver a **Productos** para comprobar que el stock se
+5. Seleccionar una venta y pulsar **Imprimir boleta** para reimprimir su
+   comprobante en la POS de 58 mm.
+6. Eliminar una venta y volver a **Productos** para comprobar que el stock se
    devuelve.
 
 ---

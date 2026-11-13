@@ -29,12 +29,15 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import pe.edu.upeu.cinemax.components.DialogoImpresion;
+import pe.edu.upeu.cinemax.components.Dialogos;
 import pe.edu.upeu.cinemax.exception.BusinessException;
 import pe.edu.upeu.cinemax.model.Cliente;
 import pe.edu.upeu.cinemax.model.Funcion;
 import pe.edu.upeu.cinemax.model.Producto;
 import pe.edu.upeu.cinemax.model.Venta;
 import pe.edu.upeu.cinemax.model.VentaDetalle;
+import pe.edu.upeu.cinemax.print.TicketVenta;
 import pe.edu.upeu.cinemax.service.IClienteService;
 import pe.edu.upeu.cinemax.service.IFuncionService;
 import pe.edu.upeu.cinemax.service.IProductoService;
@@ -46,6 +49,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class VentaController {
 
@@ -77,6 +81,13 @@ public class VentaController {
 
     private final ObservableList<VentaDetalle> detalles = FXCollections.observableArrayList();
     private String asientosSeleccionados;
+
+    /**
+     * NUEVO: boleta de la última venta registrada. Se guarda para poder
+     * reimprimirla con el botón "Imprimir boleta" aunque el formulario ya se
+     * haya limpiado.
+     */
+    private TicketVenta ultimoTicket;
 
     public VentaController(IVentaService ventaService,
                            IClienteService clienteService,
@@ -304,10 +315,22 @@ public class VentaController {
 
         try {
             Venta guardada = ventaService.registrar(venta, new ArrayList<>(detalles));
+            // NUEVO: se arma la boleta ANTES de limpiar el formulario, porque el
+            // cliente y los detalles se borran después. Queda guardada en
+            // ultimoTicket para poder reimprimirla.
+            ultimoTicket = construirTicket(guardada, new ArrayList<>(detalles), cbxCliente.getValue());
             limpiarFormulario();
             cbxProducto.setItems(FXCollections.observableArrayList(productoService.findActivos()));
             mensaje("Venta registrada con el código V" + guardada.getIdVenta()
                     + " por " + Formato.dinero(guardada.getPrecioTotal()) + ".", false);
+
+            // NUEVO: ofrece imprimir la boleta en la POS térmica de 58 mm.
+            if (Dialogos.confirmar("Imprimir boleta",
+                    "¿Deseas imprimir la boleta " + ultimoTicket.getSerie() + "-"
+                            + ultimoTicket.getNumero() + " por "
+                            + Formato.dinero(guardada.getPrecioTotal()) + "?")) {
+                DialogoImpresion.mostrar(ultimoTicket);
+            }
         } catch (BusinessException e) {
             mensaje(e.getMessage(), true);
         } catch (Exception e) {
@@ -320,6 +343,62 @@ public class VentaController {
     private void onLimpiar() {
         limpiarFormulario();
         mensaje("", false);
+    }
+
+    /**
+     * NUEVA FUNCIÓN: imprime una boleta de prueba en la POS térmica de 58 mm.
+     *
+     * <p>Funciona en dos casos:</p>
+     * <ol>
+     *   <li>Si hay productos agregados en la tabla, genera una boleta con esos
+     *       datos aunque la venta todavía no esté registrada (número 00000000).</li>
+     *   <li>Si la tabla está vacía, reimprime la boleta de la última venta
+     *       registrada en esta sesión.</li>
+     * </ol>
+     * Abre el diálogo donde se elige la impresora POS de 58 mm instalada en
+     * Windows, se ve la vista previa y se imprime. También permite guardar el
+     * ticket en disco para probar sin impresora.
+     */
+    @FXML
+    private void onImprimirBoleta() {
+        TicketVenta ticket;
+
+        if (!detalles.isEmpty()) {
+            // --- Boleta con lo que está en el formulario (aún sin registrar) ---
+            BigDecimal total = detalles.stream()
+                    .map(VentaDetalle::getNetoTotal)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add)
+                    .setScale(2, RoundingMode.HALF_UP);
+            BigDecimal neto = total.divide(UNO_MAS_IGV, 2, RoundingMode.HALF_UP);
+            Venta borrador = Venta.builder()
+                    .dniCliente(cbxCliente.getValue() == null ? "" : cbxCliente.getValue().getDni())
+                    .fechaVenta(dpFecha.getValue() == null ? LocalDate.now() : dpFecha.getValue())
+                    .netoTotal(neto)
+                    .igv(total.subtract(neto).setScale(2, RoundingMode.HALF_UP))
+                    .precioTotal(total)
+                    .build();
+            ticket = construirTicket(borrador, new ArrayList<>(detalles), cbxCliente.getValue());
+        } else {
+            // --- Reimpresión de la última venta registrada ---
+            ticket = ultimoTicket;
+        }
+
+        if (ticket == null) {
+            mensaje("Agrega productos o registra una venta para generar la boleta.", true);
+            return;
+        }
+        DialogoImpresion.mostrar(ticket);
+    }
+
+    /**
+     * NUEVA FUNCIÓN: arma el {@link TicketVenta} que se imprime.
+     * Delega en {@link TicketVenta#desde} para que Ventas e Historial generen
+     * la boleta exactamente igual.
+     */
+    private TicketVenta construirTicket(Venta venta, List<VentaDetalle> listaDetalles, Cliente cliente) {
+        String clienteNombre = cliente == null ? null : cliente.getNombre();
+        String cajero = Sesion.getUsuario() == null ? null : Sesion.getUsuario().getNombre();
+        return TicketVenta.desde(venta, listaDetalles, clienteNombre, cajero);
     }
 
     private void limpiarFormulario() {

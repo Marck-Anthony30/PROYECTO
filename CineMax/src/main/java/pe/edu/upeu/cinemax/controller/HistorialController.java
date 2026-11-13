@@ -10,15 +10,18 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import pe.edu.upeu.cinemax.components.DialogoImpresion;
 import pe.edu.upeu.cinemax.components.Dialogos;
 import pe.edu.upeu.cinemax.exception.BusinessException;
 import pe.edu.upeu.cinemax.model.Venta;
 import pe.edu.upeu.cinemax.model.VentaDetalle;
+import pe.edu.upeu.cinemax.print.TicketVenta;
 import pe.edu.upeu.cinemax.service.IVentaService;
 import pe.edu.upeu.cinemax.util.Formato;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class HistorialController {
 
@@ -132,6 +135,30 @@ public class HistorialController {
         cargar();
         limpiarDetalle();
         mensaje("", false);
+    }
+
+    /**
+     * NUEVA FUNCIÓN: reimprime la boleta de la venta seleccionada en el
+     * historial. Usa los datos guardados en la base de datos (cliente, cajero,
+     * fecha, totales y detalle) y abre el mismo diálogo de impresión de Ventas.
+     */
+    @FXML
+    private void onImprimirBoleta() {
+        Venta seleccionada = tblVentas.getSelectionModel().getSelectedItem();
+        if (seleccionada == null) {
+            mensaje("Selecciona una venta para imprimir su boleta.", true);
+            return;
+        }
+
+        List<VentaDetalle> detallesVenta = service.findDetalles(seleccionada.getIdVenta());
+        if (detallesVenta.isEmpty()) {
+            mensaje("La venta seleccionada no tiene detalle.", true);
+            return;
+        }
+
+        TicketVenta ticket = TicketVenta.desde(seleccionada, detallesVenta,
+                seleccionada.getNombreCliente(), seleccionada.getNombreUsuario());
+        DialogoImpresion.mostrar(ticket);
     }
 
     @FXML

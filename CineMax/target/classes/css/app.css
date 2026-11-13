@@ -17,14 +17,14 @@
 /* ---------------- LOGIN ---------------- */
 .login-fondo {
     -fx-background-color: #aecdf3;
-    -fx-background-image: url("../imagen/imagescine.jpg");
+    -fx-background-image: url("../imagen/imagencine.jpg");
     -fx-background-size: cover;
     -fx-background-position: center;
     -fx-background-repeat: no- repeat;
 }
 
 .login-titulo {
-    -fx-text-fill: #17f5ba;
+    -fx-text-fill: #f5c518;
     -fx-font-size: 22px;
     -fx-font-weight: bold;
 }

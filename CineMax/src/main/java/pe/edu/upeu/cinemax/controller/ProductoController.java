@@ -128,22 +128,7 @@ public class ProductoController {
         };
     }
 
-    /**
-     * NUEVA FUNCIÓN: crea una fila (TableRow) personalizada para la tabla de productos.
-     * <p>
-     * ¿Qué hace?
-     * <ol>
-     *   <li>JavaFX llama a {@code updateItem} cada vez que la fila pasa a mostrar otro producto
-     *       (al cargar, filtrar o hacer scroll, porque las filas se reciclan).</li>
-     *   <li>Primero SIEMPRE se quita la clase "stock-bajo" para no arrastrar el rosado
-     *       de un producto anterior.</li>
-     *   <li>Si la fila tiene producto y su stock es MENOR a 30, se agrega la clase
-     *       "stock-bajo": el CSS pinta toda la fila (fondo rosado).</li>
-     *   <li>Si el stock es 30 o más (o la fila está vacía), queda con el estilo normal.</li>
-     * </ol>
-     * Al usar una clase CSS en lugar de {@code setStyle}, la fila seleccionada sigue
-     * mostrando el resaltado amarillo del tema y no se pierde la selección.
-     */
+
     private TableRow<Producto> filaStockBajo() {
         return new TableRow<>() {
             @Override
