@@ -1,33 +1,36 @@
 package pe.edu.upeu.cinemax.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/** Cliente identificado por su DNI. */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cliente {
-    private int id;
+
+    @NotBlank(message = "El DNI es obligatorio.")
+    @Pattern(regexp = "\\d{8}", message = "El DNI debe tener exactamente 8 dígitos.")
     private String dni;
+
+    @NotBlank(message = "El nombre del cliente es obligatorio.")
+    @Size(max = 80, message = "El nombre no debe superar 80 caracteres.")
     private String nombre;
-    private String telefono;
 
-    public Cliente(int id, String dni, String nombre, String telefono) {
-        this.id = id;
-        this.dni = dni;
-        this.nombre = nombre;
-        this.telefono = telefono;
-    }
+    @Size(max = 120, message = "La dirección no debe superar 120 caracteres.")
+    private String direccion;
 
-    public Cliente(String dni, String nombre, String telefono) {
-        this(0, dni, nombre, telefono);
-    }
-
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public String getDni() { return dni; }
-    public void setDni(String dni) { this.dni = dni; }
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-    public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
+    @Size(max = 15, message = "El celular no debe superar 15 caracteres.")
+    private String celular;
 
     @Override
     public String toString() {
-        return nombre + " - DNI: " + dni;
+        return nombre == null ? dni : nombre + " (" + dni + ")";
     }
 }

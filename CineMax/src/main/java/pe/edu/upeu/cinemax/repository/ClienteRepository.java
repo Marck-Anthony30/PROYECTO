@@ -2,35 +2,48 @@ package pe.edu.upeu.cinemax.repository;
 
 import pe.edu.upeu.cinemax.model.Cliente;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class ClienteRepository {
-    private final List<Cliente> clientes = new ArrayList<>();
-    private int nextId = 1;
+public class ClienteRepository extends AbstractJpaRepository<Cliente, String> {
 
-    public ClienteRepository() {
-        guardar(new Cliente("00000000", "Cliente General", "999999999"));
+    @Override
+    protected String getTableName() {
+        return "cliente";
     }
 
-    public List<Cliente> listar() { return new ArrayList<>(clientes); }
-
-    public Cliente guardar(Cliente cliente) {
-        cliente.setId(nextId++);
-        clientes.add(cliente);
-        return cliente;
+    @Override
+    protected String getPkColumn() {
+        return "dni";
     }
 
-    public void actualizar(Cliente cliente) {
-        for (int i = 0; i < clientes.size(); i++) {
-            if (clientes.get(i).getId() == cliente.getId()) {
-                clientes.set(i, cliente);
-                return;
-            }
-        }
+    @Override
+    public java.util.List<Cliente> findAll() {
+        return executeQuery("SELECT * FROM cliente ORDER BY nombre");
     }
 
-    public void eliminar(int id) {
-        if (id != 1) clientes.removeIf(c -> c.getId() == id);
+    @Override
+    protected Cliente insert(Connection conn, Cliente e) throws SQLException {
+        executeInsert(conn, "INSERT INTO cliente (dni, nombre, direccion, celular) VALUES (?, ?, ?, ?)",
+                e.getDni(), e.getNombre(), e.getDireccion(), e.getCelular());
+        return e;
+    }
+
+    @Override
+    protected Cliente updateRow(Connection conn, Cliente e) throws SQLException {
+        executeUpdate(conn, "UPDATE cliente SET nombre = ?, direccion = ?, celular = ? WHERE dni = ?",
+                e.getNombre(), e.getDireccion(), e.getCelular(), e.getDni());
+        return e;
+    }
+
+    @Override
+    protected Cliente mapRow(ResultSet rs) throws SQLException {
+        return Cliente.builder()
+                .dni(rs.getString("dni"))
+                .nombre(rs.getString("nombre"))
+                .direccion(rs.getString("direccion"))
+                .celular(rs.getString("celular"))
+                .build();
     }
 }

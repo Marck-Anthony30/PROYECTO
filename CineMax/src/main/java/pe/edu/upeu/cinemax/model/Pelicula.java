@@ -1,41 +1,44 @@
 package pe.edu.upeu.cinemax.model;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import pe.edu.upeu.cinemax.enums.EstadoPelicula;
+
+/** Película que se proyecta en el cine. */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pelicula {
-    private int id;
+
+    private Long idPelicula;
+
+    @NotBlank(message = "El título es obligatorio.")
+    @Size(max = 100, message = "El título no debe superar 100 caracteres.")
     private String titulo;
+
+    @NotBlank(message = "El género es obligatorio.")
+    @Size(max = 40, message = "El género no debe superar 40 caracteres.")
     private String genero;
-    private int duracion;
+
+    @NotNull(message = "La duración es obligatoria.")
+    @Min(value = 1, message = "La duración debe ser mayor a 0 minutos.")
+    private Integer duracionMin;
+
+    @NotBlank(message = "La clasificación es obligatoria.")
     private String clasificacion;
 
-    public Pelicula(int id, String titulo, String genero, int duracion, String clasificacion) {
-        this.id = id;
-        this.titulo = titulo;
-        this.genero = genero;
-        this.duracion = duracion;
-        this.clasificacion = clasificacion;
-    }
-
-    public Pelicula(String titulo, String genero) {
-        this(0, titulo, genero, 120, "APT");
-    }
-
-    public Pelicula(String titulo, String genero, int duracion, String clasificacion) {
-        this(0, titulo, genero, duracion, clasificacion);
-    }
-
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
-    public String getGenero() { return genero; }
-    public void setGenero(String genero) { this.genero = genero; }
-    public int getDuracion() { return duracion; }
-    public void setDuracion(int duracion) { this.duracion = duracion; }
-    public String getClasificacion() { return clasificacion; }
-    public void setClasificacion(String clasificacion) { this.clasificacion = clasificacion; }
+    @NotNull(message = "El estado es obligatorio.")
+    private EstadoPelicula estado;
 
     @Override
     public String toString() {
-        return titulo + " (" + genero + ")";
+        return titulo == null ? "" : titulo;
     }
 }
